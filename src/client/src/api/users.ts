@@ -4,7 +4,7 @@ import axios from './axios'
 export const signUp = (
   email: string,
   password: string,
-  gender: number,
+  gender: 0 | 1 | 2,
   name: { first: string; last: string }
 ) => axios.post('/users', { email, password, name, gender })
 

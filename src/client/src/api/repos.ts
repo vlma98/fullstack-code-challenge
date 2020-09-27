@@ -1,7 +1,11 @@
 import { IRepo } from '../types'
 import axios from './axios'
 
-export const createRepo = (repo: IRepo) => axios.post('users/me/repos', repo)
+export const createRepo = (repo: {
+  owner: string
+  name: string
+  labels: string[]
+}) => axios.post('users/me/repos', repo)
 
 export const updateRepo = (id: string, repo: Partial<IRepo>) =>
   axios.put(`users/me/repos/${id}`, repo)

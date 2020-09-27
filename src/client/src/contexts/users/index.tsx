@@ -96,13 +96,30 @@ const UserContextProvider = function (props: { children: ReactNode }) {
         if (response.status === 200) {
           localStorage.removeItem('token')
           setSuccess('Account deleted successfully.')
-          navigate('/entrar')
+          navigate('/auth')
         } else {
           const { message } = response.data
           setError(message)
         }
       })
       .catch(errorFallback)
+  }
+
+  if (!user && !isLoading && localStorage.getItem('token')) {
+    setIsLoading(true)
+    API.getMe()
+      .then((response) => {
+        setIsLoading(false)
+        if (response.status === 200) {
+          setUser(response.data.user)
+        }
+      })
+      .catch(() => {
+        setIsLoading(false)
+        localStorage.removeItem('token')
+        setError("Seens like you're not authed")
+        navigate('/auth')
+      })
   }
 
   return (

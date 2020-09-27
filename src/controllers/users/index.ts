@@ -14,14 +14,8 @@ export const getUsers: Middleware = async (req, res, next) => {
   })
 }
 
-export const getUser: Middleware = async (req, res, next) => {
-  const { id } = req.params
-  return User.findById(id).then((user) => {
-    if (!user) {
-      return next(new InvalidRequestError('No user with id ' + id))
-    }
-    return res.status(200).json({ user })
-  })
+export const getUser: AuthedMiddleware = async (req, res, next) => {
+  return res.status(200).json({ user: req.user })
 }
 
 export const createUser: Middleware = [

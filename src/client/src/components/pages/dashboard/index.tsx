@@ -12,8 +12,8 @@ const DashboardPage = function (props: Props) {
   return (
     <Layout>
       <Row justify='center'>
-        {repos.map((r) => (
-          <Col xl={9} lg={9} md={18} sm={24} xs={24}>
+        {repos.map((r, idx) => (
+          <Col xl={9} lg={9} md={18} sm={24} xs={24} key={idx}>
             <Repository repo={r} key={r._id} />
           </Col>
         ))}

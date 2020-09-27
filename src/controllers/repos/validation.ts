@@ -3,12 +3,11 @@ import { AuthedHandler } from '../../types'
 export interface ICreateRepo {
   owner: string
   name: string
-  labels: string
+  labels: string[]
 }
 
 export const validateCreateRepoBody: AuthedHandler = async (req, res, next) => {
   const { owner, name, labels } = req.body as ICreateRepo
-  const labelsArray = labels.split(',')
   // to do validate input agains github
   return next()
 }

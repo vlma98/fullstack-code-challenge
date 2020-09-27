@@ -43,7 +43,7 @@ export const createRepo: AuthedMiddleware = [
       _idUser: user._id,
       owner,
       name,
-      labels: labels.split(',')
+      labels
     })
     return repo
       .save()

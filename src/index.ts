@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import cors from 'cors'
 import db from './db'
 import { userRoutes, authRoute, githubRoutes } from './routes'
 import { errorMiddleware } from './middlewares'
@@ -9,11 +10,7 @@ const PORT = 8080
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(async (req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', ctes.clientUrl)
-  res.setHeader('Access-Control-Allow-Headers', '*')
-  next()
-})
+app.use(cors())
 
 app.use('/users', userRoutes)
 app.use('/auth', authRoute)

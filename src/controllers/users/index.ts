@@ -8,6 +8,7 @@ import {
   validateUpdateUserBody
 } from './validation'
 import { login } from '../auth'
+import { verifyAuth } from '../../middlewares'
 
 export const getUsers: Middleware = async (req, res, next) => {
   return User.find({}).then((users) => {
@@ -15,9 +16,12 @@ export const getUsers: Middleware = async (req, res, next) => {
   })
 }
 
-export const getUser: AuthedMiddleware = async (req, res, next) => {
-  return res.status(200).json({ user: req.user })
-}
+export const getUser: AuthedMiddleware = [
+  verifyAuth,
+  async (req, res, next) => {
+    return res.status(200).json({ user: req.user })
+  }
+]
 
 export const createUser: Middleware = [
   validateCreateUserBody,

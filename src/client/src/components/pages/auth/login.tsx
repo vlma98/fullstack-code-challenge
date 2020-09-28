@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Button, Form, Input } from 'antd'
 import { navigate } from '@reach/router'
+import UsersContext from '../../../contexts/users'
+
 import './auth.css'
 
 interface Props {}
@@ -8,9 +10,10 @@ const Login = function (props: Props) {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
 
+  const { login, isLoading } = useContext(UsersContext)
+
   const handleLogin = async () => {
-    alert('Loging in with ' + email + ' password')
-    navigate('/dashboard')
+    login(email, password)
   }
 
   const layout = {
@@ -20,6 +23,8 @@ const Login = function (props: Props) {
   const tailLayout = {
     wrapperCol: { offset: 10, span: 16 }
   }
+
+  if (localStorage.getItem('token')) navigate('/dashboard')
 
   return (
     <div>
@@ -34,7 +39,7 @@ const Login = function (props: Props) {
           />
         </Form.Item>
         <Form.Item {...tailLayout}>
-          <Button type='primary' onClick={handleLogin}>
+          <Button type='primary' onClick={handleLogin} loading={isLoading}>
             Login
           </Button>
         </Form.Item>

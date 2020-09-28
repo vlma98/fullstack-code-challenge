@@ -21,7 +21,7 @@ const errorHandler = async (
 
   for (const error of knownErrors) {
     if (err instanceof error) {
-      return res.status(500).send(err.message)
+      return res.status(500).json({ message: err.message })
     }
   }
 

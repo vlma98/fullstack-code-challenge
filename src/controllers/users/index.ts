@@ -7,6 +7,7 @@ import {
   validateCreateUserBody,
   validateUpdateUserBody
 } from './validation'
+import { login } from '../auth'
 
 export const getUsers: Middleware = async (req, res, next) => {
   return User.find({}).then((users) => {
@@ -21,6 +22,7 @@ export const getUser: AuthedMiddleware = async (req, res, next) => {
 export const createUser: Middleware = [
   validateCreateUserBody,
   async (req, res, next) => {
+    const { email, password } = req.body
     const user = new User(req.body as ICreateUserBody)
     const validationError = user.validateSync()
     if (validationError) {
@@ -28,8 +30,12 @@ export const createUser: Middleware = [
     }
     return user
       .save()
-      .then((user) => {
-        return res.status(200).json({ user })
+      .then(() => {
+        return login(email, password)
+          .then(({ user, token }) => {
+            return res.status(200).json({ user, token })
+          })
+          .catch(next)
       })
       .catch((err) => {
         if (err.code === 11000) {

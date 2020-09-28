@@ -32,6 +32,7 @@ const UserContextProvider = function (props: { children: ReactNode }) {
 
   const errorFallback = (error: Error) => {
     console.error(error)
+    setIsLoading(false)
     setError('Error with server, try back later.')
   }
 

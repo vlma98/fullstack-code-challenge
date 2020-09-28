@@ -1,15 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Button, Form, Input } from 'antd'
+import UsersContext from '../../../contexts/users'
+import { navigate } from '@reach/router'
 import './auth.css'
 
 interface Props {}
 const SignUp = function (props: Props) {
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const [confirmPassword, setConfirmPassword] = useState<string>('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+
+  const { signUp, isLoading, user } = useContext(UsersContext)
 
   const handleSubmit = () => {
-    alert('Sign up with ' + email + ' ' + password + ' ' + confirmPassword)
+    signUp(email, password, 2, { first: firstName, last: lastName })
   }
 
   const layout = {
@@ -20,9 +26,23 @@ const SignUp = function (props: Props) {
     wrapperCol: { offset: 10, span: 16 }
   }
 
+  if (localStorage.getItem('token')) navigate('/dashboard')
+
   return (
     <div>
       <Form {...layout} className='auth-form'>
+        <Form.Item label='First name' name='firstName' labelAlign='left'>
+          <Input
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+        </Form.Item>
+        <Form.Item label='Last name' name='lastName' labelAlign='left'>
+          <Input
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+        </Form.Item>
         <Form.Item name='email' label='Email' labelAlign='left'>
           <Input value={email} onChange={(e) => setEmail(e.target.value)} />
         </Form.Item>
@@ -43,7 +63,7 @@ const SignUp = function (props: Props) {
           />
         </Form.Item>
         <Form.Item {...tailLayout}>
-          <Button type='primary' onClick={handleSubmit}>
+          <Button type='primary' onClick={handleSubmit} loading={isLoading}>
             Submit
           </Button>
         </Form.Item>

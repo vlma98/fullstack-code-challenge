@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { RouteComponentProps } from '@reach/router'
 import Repository from '../../ui/molecules/repository'
-import { Row, Col, Button, Modal, Form, Input, Tag } from 'antd'
+import { Row, Col, Button, Modal, Form, Input, Tag, Divider } from 'antd'
 import Layout from '../../ui/layout'
 import ReposContext from '../../../contexts/repos'
 import { PlusOutlined } from '@ant-design/icons'
@@ -15,14 +15,27 @@ const DashboardPage = function (props: Props) {
   const [labels, setLabels] = useState<string[]>([])
   const [addingLabel, setAddingLabel] = useState(false)
   const [newLabel, setNewLabel] = useState('')
+  const [repoURL, setRepoURL] = useState('')
 
   const handleAddRepo = async () => {
-    createRepo({ owner, name, labels }).then(() => {
-      setAdding(false)
-      setOwner('')
-      setName('')
-      setLabels([])
-    })
+    if (repoURL) {
+      const [owner, name] = repoURL.split('/')
+      createRepo({ owner, name, labels }).then(() => {
+        setAdding(false)
+        setOwner('')
+        setName('')
+        setLabels([])
+        setRepoURL('')
+      })
+    } else {
+      createRepo({ owner, name, labels }).then(() => {
+        setAdding(false)
+        setOwner('')
+        setName('')
+        setLabels([])
+        setRepoURL('')
+      })
+    }
   }
 
   const handleAddLabel = async () => {
@@ -53,6 +66,29 @@ const DashboardPage = function (props: Props) {
         okButtonProps={{ loading: isLoading }}
         title='Add new repository'
       >
+        <Form>
+          <Form.Item
+            label='Repo URL'
+            name='url'
+            rules={[
+              ({ getFieldValue }) => ({
+                validator(rule, value) {
+                  if (getFieldValue('url').split('/').length >= 2) {
+                    return Promise.resolve()
+                  }
+                  return Promise.reject('Invalid URL')
+                }
+              })
+            ]}
+          >
+            <Input
+              prefix='https://github.com/'
+              value={repoURL}
+              onChange={(e) => setRepoURL(e.target.value)}
+            />
+          </Form.Item>
+        </Form>
+        <Divider orientation='center'>ou</Divider>
         <Form>
           <Form.Item label='Owner' name='owner'>
             <Input value={owner} onChange={(e) => setOwner(e.target.value)} />

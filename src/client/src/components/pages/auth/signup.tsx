@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Button, Form, Input } from 'antd'
 import UsersContext from '../../../contexts/users'
-import { navigate } from '@reach/router'
 import './auth.css'
 
 interface Props {}
@@ -12,7 +11,7 @@ const SignUp = function (props: Props) {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
 
-  const { signUp, isLoading, user } = useContext(UsersContext)
+  const { signUp, isLoading } = useContext(UsersContext)
 
   const handleSubmit = () => {
     signUp(email, password, 2, { first: firstName, last: lastName })

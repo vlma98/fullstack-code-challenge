@@ -26,8 +26,6 @@ const SignUp = function (props: Props) {
     wrapperCol: { offset: 10, span: 16 }
   }
 
-  if (localStorage.getItem('token')) navigate('/dashboard')
-
   return (
     <div>
       <Form {...layout} className='auth-form'>

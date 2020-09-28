@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Layout as ALayout, Menu, Typography } from 'antd'
 import {
   LogoutOutlined,
   ProfileOutlined,
   DashboardOutlined
 } from '@ant-design/icons'
+import UsersContext from '../../../contexts/users'
 import './layout.css'
 const { Header, Content, Sider } = ALayout
 const { Title } = Typography
@@ -14,7 +15,7 @@ interface Props {
 }
 const Layout: React.FC = function (props: Props) {
   const [collapsed, setCollapsed] = useState(false)
-
+  const { logout } = useContext(UsersContext)
   return (
     <ALayout style={{ maxHeight: '100vh' }}>
       <Sider
@@ -26,7 +27,7 @@ const Layout: React.FC = function (props: Props) {
         <Menu theme='dark' title='Find me issues'>
           <Menu.Item icon={<DashboardOutlined />}>Dashboard</Menu.Item>
           <Menu.Item icon={<ProfileOutlined />}>Perfil</Menu.Item>
-          <Menu.Item icon={<LogoutOutlined />}>Sign out</Menu.Item>
+          <Menu.Item icon={<LogoutOutlined />} onClick={logout}>Sign out</Menu.Item>
         </Menu>
       </Sider>
       <ALayout>

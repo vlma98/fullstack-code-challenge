@@ -12,6 +12,7 @@ interface IUserContext {
   login: (...args: Parameters<typeof API.login>) => Promise<void>
   updateMe: (...args: Parameters<typeof API.updateMe>) => Promise<void>
   deleteMe: (...args: Parameters<typeof API.deleteMe>) => Promise<void>
+  logout: () => Promise<void>
 }
 
 const UserContext = createContext<IUserContext>({
@@ -20,7 +21,8 @@ const UserContext = createContext<IUserContext>({
   signUp: async (...args: Parameters<typeof API.signUp>) => {},
   login: async (...args: Parameters<typeof API.login>) => {},
   updateMe: async (...args: Parameters<typeof API.updateMe>) => {},
-  deleteMe: async (...args: Parameters<typeof API.deleteMe>) => {}
+  deleteMe: async (...args: Parameters<typeof API.deleteMe>) => {},
+  logout: async () => {}
 })
 
 const UserContextProvider = function (props: { children: ReactNode }) {
@@ -50,6 +52,7 @@ const UserContextProvider = function (props: { children: ReactNode }) {
           const { user, token } = response.data
           setUser(user)
           localStorage.setItem('token', token)
+          navigate('/dashboard')
         } else {
           const { message } = response.data
           setError(message)
@@ -66,6 +69,7 @@ const UserContextProvider = function (props: { children: ReactNode }) {
           const { user, token } = response.data
           setUser(user)
           localStorage.setItem('token', token)
+          navigate('/auth')
         } else {
           const { message } = response.data
           setError(message)
@@ -123,6 +127,12 @@ const UserContextProvider = function (props: { children: ReactNode }) {
       })
   }
 
+  const logout = async () => {
+    localStorage.removeItem('token')
+    setUser(null)
+    navigate('/auth')
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -131,7 +141,8 @@ const UserContextProvider = function (props: { children: ReactNode }) {
         signUp,
         login,
         updateMe,
-        deleteMe
+        deleteMe,
+        logout
       }}
     >
       {children}

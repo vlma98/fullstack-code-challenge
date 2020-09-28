@@ -19,6 +19,9 @@ const DashboardPage = function (props: Props) {
   const handleAddRepo = async () => {
     createRepo({ owner, name, labels }).then(() => {
       setAdding(false)
+      setOwner('')
+      setName('')
+      setLabels([])
     })
   }
 

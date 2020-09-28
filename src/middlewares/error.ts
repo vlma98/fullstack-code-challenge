@@ -25,6 +25,8 @@ const errorHandler = async (
     }
   }
 
+  console.error(err)
+
   return res.status(500).send('Erro no servidor.')
 }
 

@@ -1,9 +1,19 @@
-import { Badge, Card, Collapse, Input, Tag, Tooltip, Typography } from 'antd'
+import {
+  Badge,
+  Card,
+  Collapse,
+  Input,
+  Spin,
+  Tag,
+  Tooltip,
+  Typography
+} from 'antd'
 import React, { useState } from 'react'
 import { IIssue, IRepo } from '../../../../types'
 import issues from '../../../../mock/issues'
-import './repository.css'
 import { PlusCircleOutlined } from '@ant-design/icons'
+import { getIssues } from '../../../../api/github'
+import './repository.css'
 
 const { Text } = Typography
 
@@ -19,6 +29,19 @@ const Repository = function (props: Props) {
   const [label, setLabel] = useState('')
   const [addingLabel, setAddingLabel] = useState(false)
   const [newLabel, setNewLabel] = useState('')
+  const [issuesLoading, setIssuesLoading] = useState(true)
+  const [issues, setIssues] = useState<IIssue[] | null>(null)
+
+  if (issues === null) {
+    getIssues(owner, name, labels)
+      .then((response) => {
+        setIssuesLoading(false)
+        setIssues(response.data.issues)
+      })
+      .catch((err) => {
+        setIssuesLoading(false)
+      })
+  }
 
   const handleEditConfirm = async () => {
     alert('Edited label now is ' + label)
@@ -119,7 +142,8 @@ const Repository = function (props: Props) {
       </div>
       <Collapse style={{ marginTop: 15 }}>
         <Collapse.Panel key='0' header='See more...'>
-          {issues.map(renderIssue)}
+          {issuesLoading && <Spin />}
+          {issues && issues.map(renderIssue)}
         </Collapse.Panel>
       </Collapse>
     </Card>

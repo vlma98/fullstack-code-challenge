@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { RouteComponentProps } from '@reach/router'
 import Repository from '../../ui/molecules/repository'
 import { Row, Col, Button, Modal, Form, Input, Tag, Divider } from 'antd'
@@ -8,7 +8,7 @@ import { PlusOutlined } from '@ant-design/icons'
 
 interface Props extends RouteComponentProps {}
 const DashboardPage = function (props: Props) {
-  const { repos, isLoading, createRepo } = useContext(ReposContext)
+  const { repos, isLoading, createRepo, getRepos } = useContext(ReposContext)
   const [adding, setAdding] = useState(false)
   const [owner, setOwner] = useState('')
   const [name, setName] = useState('')
@@ -16,6 +16,10 @@ const DashboardPage = function (props: Props) {
   const [addingLabel, setAddingLabel] = useState(false)
   const [newLabel, setNewLabel] = useState('')
   const [repoURL, setRepoURL] = useState('')
+
+  useEffect(() => {
+    getRepos()
+  }, [])
 
   const handleAddRepo = async () => {
     if (repoURL) {
@@ -48,7 +52,7 @@ const DashboardPage = function (props: Props) {
 
   return (
     <Layout>
-      <Button onClick={() => setAdding(true)}>
+      <Button type='primary' onClick={() => setAdding(true)}>
         <PlusOutlined /> Add repository
       </Button>
       <Row justify='center'>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { RouteComponentProps } from '@reach/router'
+import { navigate, RouteComponentProps } from '@reach/router'
 
 import { Tabs } from 'antd'
 
@@ -11,6 +11,7 @@ const { TabPane } = Tabs
 
 interface Props extends RouteComponentProps {}
 const AuthPage = function (props: Props) {
+  if (localStorage.getItem('token')) navigate('/dashboard')
   return (
     <div className='container'>
       <Tabs defaultActiveKey='1' animated size='large' translate='yes' centered>

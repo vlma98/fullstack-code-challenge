@@ -29,7 +29,11 @@ const DashboardPage = function (props: Props) {
           </Col>
         ))}
       </Row>
-      <ModalRepoForm visible={adding} onCancel={() => setAdding(false)} />
+      <ModalRepoForm
+        visible={adding}
+        onCancel={() => setAdding(false)}
+        edition={false}
+      />
     </Layout>
   )
 }

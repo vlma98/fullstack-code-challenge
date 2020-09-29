@@ -9,17 +9,27 @@ const { githubUrl } = ctes
 interface Props {
   visible: boolean
   onCancel: () => void
+  initialValues?: {
+    _id: string
+    owner: string
+    name: string
+    labels: string[]
+  }
+  title?: string
+  edition: boolean
 }
 const RepoForm = function (props: Props) {
-  const [adding, setAdding] = useState(false)
-  const [repoURL, setRepoURL] = useState('')
-  const [owner, setOwner] = useState('')
-  const [name, setName] = useState('')
-  const [labels, setLabels] = useState<string[]>([])
+  const { initialValues } = props
+  const [repoURL, setRepoURL] = useState(
+    initialValues ? initialValues.owner + '/' + initialValues.name : ''
+  )
+  const [owner, setOwner] = useState(initialValues?.owner || '')
+  const [name, setName] = useState(initialValues?.name || '')
+  const [labels, setLabels] = useState<string[]>(initialValues?.labels || [])
   const [addingLabel, setAddingLabel] = useState(false)
   const [newLabel, setNewLabel] = useState('')
 
-  const { isLoading, createRepo } = useContext(ReposContext)
+  const { isLoading, createRepo, updateRepo } = useContext(ReposContext)
 
   const handleAddLabel = async () => {
     if (newLabel) {
@@ -29,24 +39,33 @@ const RepoForm = function (props: Props) {
     setAddingLabel(false)
   }
 
+  const closeAndReset = () => {
+    setOwner('')
+    setName('')
+    setLabels([])
+    setRepoURL('')
+    props.onCancel() // just to close the modal
+  }
+
   const handleAddRepo = async () => {
-    if (repoURL) {
-      const [owner, name] = repoURL.split('/')
-      createRepo({ owner, name, labels }).then(() => {
-        setAdding(false)
-        setOwner('')
-        setName('')
-        setLabels([])
-        setRepoURL('')
-      })
+    const [urlOwner, urlName] = repoURL.split('/')
+    let usedOwner: string = owner,
+      usedName: string = name
+    if (repoURL.split('/').length >= 2) {
+      usedOwner = urlOwner
+      usedName = urlName
+    }
+    if (props.edition) {
+      createRepo({ owner: usedOwner, name: usedName, labels }).then(
+        closeAndReset
+      )
     } else {
-      createRepo({ owner, name, labels }).then(() => {
-        setAdding(false)
-        setOwner('')
-        setName('')
-        setLabels([])
-        setRepoURL('')
-      })
+      initialValues &&
+        updateRepo(initialValues._id, {
+          owner: usedOwner,
+          name: usedName,
+          labels
+        }).then(closeAndReset)
     }
   }
 
@@ -56,9 +75,9 @@ const RepoForm = function (props: Props) {
       onCancel={props.onCancel}
       onOk={handleAddRepo}
       okButtonProps={{ loading: isLoading }}
-      title='Add new repository'
+      title={props.title || 'Add new repository'}
     >
-      <Form>
+      <Form initialValues={{ url: repoURL }}>
         <Form.Item
           label='Repo URL'
           name='url'
@@ -81,7 +100,7 @@ const RepoForm = function (props: Props) {
         </Form.Item>
       </Form>
       <Divider orientation='center'>ou</Divider>
-      <Form>
+      <Form initialValues={{ owner, name }}>
         <Form.Item label='Owner' name='owner'>
           <Input value={owner} onChange={(e) => setOwner(e.target.value)} />
         </Form.Item>

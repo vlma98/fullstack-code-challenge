@@ -1,8 +1,9 @@
-import { Badge, Button, Card, Input, Tag, Tooltip } from 'antd'
+import { Button, Card, Input, Tag, Tooltip } from 'antd'
 import React, { useState } from 'react'
 import { IRepo } from '../../../../types'
 import { EditFilled, PlusCircleOutlined } from '@ant-design/icons'
 // import { getIssues } from '../../../../api/github'
+import ModalRepoForm from '../repo-form'
 import './repository.css'
 
 interface Props {
@@ -11,12 +12,13 @@ interface Props {
 const Repository = function (props: Props) {
   const { repo } = props
 
-  const { owner, name, labels } = repo
+  const { owner, name, labels, _id } = repo
 
   const [editInputIndex, setEditInputIndex] = useState<number | null>(null)
   const [label, setLabel] = useState('')
   const [addingLabel, setAddingLabel] = useState(false)
   const [newLabel, setNewLabel] = useState('')
+  const [editing, setEditing] = useState(false)
   // const [issues, setIssues] = useState<IIssue[] | null>(null)
 
   // if (issues === null) {
@@ -94,7 +96,7 @@ const Repository = function (props: Props) {
       title={`${owner}/${name}`}
       className='repo-container'
       extra={
-        <Button onClick={() => {}}>
+        <Button onClick={() => setEditing(true)}>
           <EditFilled />
         </Button>
       }
@@ -139,6 +141,13 @@ const Repository = function (props: Props) {
         </Collapse.Panel>
       </Collapse>
       */}
+
+      <ModalRepoForm
+        edition={true}
+        visible={editing}
+        onCancel={() => setEditing(false)}
+        initialValues={{ owner, name, labels, _id }}
+      />
     </Card>
   )
 }

@@ -26,11 +26,21 @@ const Login = function (props: Props) {
   return (
     <div>
       <Form {...layout} className='auth-form'>
-        <Form.Item label='Email' name='email' labelAlign='left'>
-          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Form.Item
+          label='Email'
+          name='email'
+          labelAlign='left'
+          rules={[{ message: 'Not a valid email', type: 'email' }]}
+        >
+          <Input
+            type='email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </Form.Item>
         <Form.Item label='Password' name='password' labelAlign='left'>
-          <Input
+          <Input.Password
+            type='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

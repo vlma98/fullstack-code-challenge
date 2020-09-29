@@ -40,11 +40,17 @@ const SignUp = function (props: Props) {
             onChange={(e) => setLastName(e.target.value)}
           />
         </Form.Item>
-        <Form.Item name='email' label='Email' labelAlign='left'>
+        <Form.Item
+          name='email'
+          label='Email'
+          labelAlign='left'
+          rules={[{ message: 'Not a valid email', type: 'email' }]}
+        >
           <Input value={email} onChange={(e) => setEmail(e.target.value)} />
         </Form.Item>
         <Form.Item name='password' label='Password' labelAlign='left'>
-          <Input
+          <Input.Password
+            type='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -54,7 +60,8 @@ const SignUp = function (props: Props) {
           label='Confirm Password'
           labelAlign='left'
         >
-          <Input
+          <Input.Password
+            type='password'
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />

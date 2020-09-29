@@ -1,7 +1,7 @@
-import { Badge, Card, Input, Tag, Tooltip } from 'antd'
+import { Badge, Button, Card, Input, Tag, Tooltip } from 'antd'
 import React, { useState } from 'react'
 import { IRepo } from '../../../../types'
-import { PlusCircleOutlined } from '@ant-design/icons'
+import { EditFilled, PlusCircleOutlined } from '@ant-design/icons'
 // import { getIssues } from '../../../../api/github'
 import './repository.css'
 
@@ -93,7 +93,11 @@ const Repository = function (props: Props) {
     <Card
       title={`${owner}/${name}`}
       className='repo-container'
-      extra={<Badge count={10} style={{ backgroundColor: 'green' }}></Badge>}
+      extra={
+        <Button onClick={() => {}}>
+          <EditFilled />
+        </Button>
+      }
     >
       <div className='repo-labels'>
         <p>Labels you're following:</p>

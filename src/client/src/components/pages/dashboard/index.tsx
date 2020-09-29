@@ -19,9 +19,22 @@ const DashboardPage = function (props: Props) {
 
   return (
     <Layout>
-      <Button type='primary' onClick={() => setAdding(true)}>
-        <PlusOutlined /> Add repository
-      </Button>
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          margin: '15px 0px'
+        }}
+      >
+        <Button
+          type='primary'
+          onClick={() => setAdding(true)}
+          style={{ margin: 'auto auto' }}
+        >
+          <PlusOutlined /> Add repository
+        </Button>
+      </div>
       <Row justify='center'>
         {repos.map((r, idx) => (
           <Col xl={9} lg={9} md={18} sm={24} xs={24} key={idx}>

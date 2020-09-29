@@ -62,7 +62,7 @@ export const updateRepo: RepoMiddleware = [
 
     if (owner) repo.owner = owner
     if (name) repo.name = name
-    if (labels) repo.labels = labels.split(',')
+    if (labels) repo.labels = labels
 
     return repo
       .save()

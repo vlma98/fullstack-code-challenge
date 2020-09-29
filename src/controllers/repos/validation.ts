@@ -15,7 +15,7 @@ export const validateCreateRepoBody: AuthedHandler = async (req, res, next) => {
 export interface IUpdateRepoBody {
   owner?: string
   name?: string
-  labels?: string
+  labels?: string[]
 }
 
 export const validateUpdateRepoBody: AuthedHandler = async (req, res, next) => {

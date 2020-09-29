@@ -1,9 +1,14 @@
-import { Button, Card, Input, Tag, Tooltip } from 'antd'
-import React, { useState } from 'react'
+import { Button, Card, Input, Space, Tag, Tooltip } from 'antd'
+import React, { useState, useContext } from 'react'
 import { IRepo } from '../../../../types'
-import { EditFilled, PlusCircleOutlined } from '@ant-design/icons'
+import {
+  CloseCircleFilled,
+  EditFilled,
+  PlusCircleOutlined
+} from '@ant-design/icons'
 // import { getIssues } from '../../../../api/github'
 import ModalRepoForm from '../repo-form'
+import ReposContext from '../../../../contexts/repos'
 import './repository.css'
 
 interface Props {
@@ -32,9 +37,18 @@ const Repository = function (props: Props) {
   //     })
   // }
 
+  const { updateRepo, deleteRepo } = useContext(ReposContext)
+
   const handleEditConfirm = async () => {
-    alert('Edited label now is ' + label)
-    setEditInputIndex(null)
+    if (label)
+      updateRepo(_id, {
+        owner,
+        name,
+        labels: labels.map((l, idx) => (idx === editInputIndex ? label : l))
+      }).then(() => {
+        setEditInputIndex(null)
+      })
+    else setEditInputIndex(null)
   }
 
   const renderTag = (
@@ -64,14 +78,24 @@ const Repository = function (props: Props) {
   }
 
   const handleRemoveLabel = async (label: string) => {
-    alert('Removing label ' + label)
+    updateRepo(_id, { owner, name, labels: labels.filter((l) => l !== label) })
   }
 
   const handleAddLabel = async () => {
-    alert('Adding ' + newLabel)
-    setAddingLabel(false)
-    setNewLabel('')
+    if (newLabel)
+      updateRepo(_id, { owner, name, labels: [...labels, newLabel] }).then(
+        () => {
+          setAddingLabel(false)
+          setNewLabel('')
+        }
+      )
+    else {
+      setAddingLabel(false)
+      setNewLabel('')
+    }
   }
+
+  const handleDelete = async () => deleteRepo(_id)
 
   // const renderIssue = (issue: IIssue, index: number, A: IIssue[]) => {
   //   const { title, labels, url, id } = issue
@@ -96,9 +120,14 @@ const Repository = function (props: Props) {
       title={`${owner}/${name}`}
       className='repo-container'
       extra={
-        <Button onClick={() => setEditing(true)}>
-          <EditFilled />
-        </Button>
+        <Space direction='horizontal'>
+          <Button onClick={() => setEditing(true)}>
+            <EditFilled />
+          </Button>
+          <Button danger onClick={handleDelete}>
+            <CloseCircleFilled />
+          </Button>
+        </Space>
       }
     >
       <div className='repo-labels'>
@@ -106,6 +135,7 @@ const Repository = function (props: Props) {
         {labels.map((l, idx) =>
           editInputIndex === idx ? (
             <Input
+              style={{ width: 100 }}
               key={idx}
               value={label}
               onChange={(e) => setLabel(e.target.value)}
@@ -125,6 +155,8 @@ const Repository = function (props: Props) {
         )}
         {addingLabel && (
           <Input
+            style={{ width: 100 }}
+            autoFocus
             size='small'
             value={newLabel}
             onChange={(e) => setNewLabel(e.target.value)}

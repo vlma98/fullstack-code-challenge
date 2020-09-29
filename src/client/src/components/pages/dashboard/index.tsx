@@ -19,6 +19,7 @@ const DashboardPage = function (props: Props) {
 
   useEffect(() => {
     getRepos()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleAddRepo = async () => {

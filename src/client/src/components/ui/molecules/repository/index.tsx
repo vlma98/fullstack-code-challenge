@@ -1,21 +1,9 @@
-import {
-  Badge,
-  Card,
-  Collapse,
-  Input,
-  Spin,
-  Tag,
-  Tooltip,
-  Typography
-} from 'antd'
+import { Badge, Card, Input, Tag, Tooltip } from 'antd'
 import React, { useState } from 'react'
-import { IIssue, IRepo } from '../../../../types'
-import issues from '../../../../mock/issues'
+import { IRepo } from '../../../../types'
 import { PlusCircleOutlined } from '@ant-design/icons'
-import { getIssues } from '../../../../api/github'
+// import { getIssues } from '../../../../api/github'
 import './repository.css'
-
-const { Text } = Typography
 
 interface Props {
   repo: IRepo
@@ -29,19 +17,18 @@ const Repository = function (props: Props) {
   const [label, setLabel] = useState('')
   const [addingLabel, setAddingLabel] = useState(false)
   const [newLabel, setNewLabel] = useState('')
-  const [issuesLoading, setIssuesLoading] = useState(true)
-  const [issues, setIssues] = useState<IIssue[] | null>(null)
+  // const [issues, setIssues] = useState<IIssue[] | null>(null)
 
-  if (issues === null) {
-    getIssues(owner, name, labels)
-      .then((response) => {
-        setIssuesLoading(false)
-        setIssues(response.data.issues)
-      })
-      .catch((err) => {
-        setIssuesLoading(false)
-      })
-  }
+  // if (issues === null) {
+  //   getIssues(owner, name, labels)
+  //     .then((response) => {
+  //       setIssuesLoading(false)
+  //       setIssues(response.data.issues)
+  //     })
+  //     .catch((err) => {
+  //       setIssuesLoading(false)
+  //     })
+  // }
 
   const handleEditConfirm = async () => {
     alert('Edited label now is ' + label)
@@ -84,23 +71,23 @@ const Repository = function (props: Props) {
     setNewLabel('')
   }
 
-  const renderIssue = (issue: IIssue, index: number, A: IIssue[]) => {
-    const { title, labels, url, id } = issue
-    return (
-      <div key={id} style={{ marginBottom: 30 }}>
-        <a href={url}>
-          <Text strong>{title}</Text>
-          <div>
-            {labels.map(({ color, name }) => (
-              <Tag color={color} key={name}>
-                {name}
-              </Tag>
-            ))}
-          </div>
-        </a>
-      </div>
-    )
-  }
+  // const renderIssue = (issue: IIssue, index: number, A: IIssue[]) => {
+  //   const { title, labels, url, id } = issue
+  //   return (
+  //     <div key={id} style={{ marginBottom: 30 }}>
+  //       <a href={url}>
+  //         <Text strong>{title}</Text>
+  //         <div>
+  //           {labels.map(({ color, name }) => (
+  //             <Tag color={color} key={name}>
+  //               {name}
+  //             </Tag>
+  //           ))}
+  //         </div>
+  //       </a>
+  //     </div>
+  //   )
+  // }
 
   return (
     <Card
@@ -140,12 +127,14 @@ const Repository = function (props: Props) {
           />
         )}
       </div>
+      {/* 
       <Collapse style={{ marginTop: 15 }}>
         <Collapse.Panel key='0' header='See more...'>
           {issuesLoading && <Spin />}
           {issues && issues.map(renderIssue)}
         </Collapse.Panel>
       </Collapse>
+      */}
     </Card>
   )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect, Router } from '@reach/router'
 import './app.less'
-import { Auth, Dashboard } from '../pages'
+import { Auth, Dashboard, ProfilePage } from '../pages'
 import { UserContextProvider } from '../../contexts/users'
 import { RepoContextProvider } from '../../contexts/repos'
 function App() {
@@ -13,6 +13,7 @@ function App() {
             <Redirect noThrow from='/' to='/auth' />
             <Auth path='/auth' />
             <Dashboard path='/dashboard' />
+            <ProfilePage path='/profile' />
           </Router>
         </RepoContextProvider>
       </UserContextProvider>

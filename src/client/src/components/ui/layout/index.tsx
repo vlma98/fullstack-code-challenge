@@ -7,6 +7,7 @@ import {
 } from '@ant-design/icons'
 import UsersContext from '../../../contexts/users'
 import './layout.css'
+import { navigate } from '@reach/router'
 const { Header, Content, Sider } = ALayout
 const { Title } = Typography
 
@@ -25,9 +26,21 @@ const Layout: React.FC = function (props: Props) {
         onCollapse={(v) => setCollapsed(v)}
       >
         <Menu theme='dark' title='Find me issues'>
-          <Menu.Item icon={<DashboardOutlined />}>Dashboard</Menu.Item>
-          <Menu.Item icon={<ProfileOutlined />}>Perfil</Menu.Item>
-          <Menu.Item icon={<LogoutOutlined />} onClick={logout}>Sign out</Menu.Item>
+          <Menu.Item
+            icon={<DashboardOutlined />}
+            onClick={() => navigate('/dashboard')}
+          >
+            Dashboard
+          </Menu.Item>
+          <Menu.Item
+            icon={<ProfileOutlined />}
+            onClick={() => navigate('/profile')}
+          >
+            Perfil
+          </Menu.Item>
+          <Menu.Item icon={<LogoutOutlined />} onClick={logout}>
+            Sign out
+          </Menu.Item>
         </Menu>
       </Sider>
       <ALayout>

@@ -1,0 +1,14 @@
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  /* max-width: 300px; */
+  /* border: 1px solid black; */
+  margin: auto auto;
+  width: 100%;
+}
+
+.profile-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

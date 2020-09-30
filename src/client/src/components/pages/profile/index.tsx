@@ -4,6 +4,11 @@ import { Button, Input, Typography, Form, Spin, Modal, Space } from 'antd'
 import UsersContext from '../../../contexts/users'
 import Layout from '../../ui/layout'
 import './profile.css'
+import useError from '../../../hooks/useError'
+import validateEmail, {
+  emailBasicRegex,
+  emailFormRule
+} from '../../../utils/form/validateEmail'
 
 const { Paragraph: p } = Typography
 
@@ -27,7 +32,8 @@ const ProfilePage = function (props: Props) {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
-
+  const [formValid, setFormValid] = useState(true)
+  const [, setError] = useError()
   const handleChangePassword = async () => {
     alert(`Changin password with ${password} ${confirmPassword} ${newPassword}`)
     setChanginPassword(false)
@@ -38,6 +44,10 @@ const ProfilePage = function (props: Props) {
   }
 
   const handleUpdate = async () => {
+    if (email !== user.email && !validateEmail(email)) {
+      setError('Email invalid')
+      return
+    }
     setUpdating(false)
     updateMe({
       name: {
@@ -46,6 +56,12 @@ const ProfilePage = function (props: Props) {
       },
       email: email || user.email
     })
+  }
+
+  const validateForm = (values: { email: string }) => {
+    const { email } = values
+    const valid = email !== '' && validateEmail(email)
+    setFormValid(valid)
   }
 
   return (
@@ -82,14 +98,27 @@ const ProfilePage = function (props: Props) {
         )}
 
         {updating && (
-          <Form {...layout}>
+          <Form
+            initialValues={{
+              email: user.email,
+              firstName: user.name.first,
+              secondName: user.name.last
+            }}
+            {...layout}
+            onValuesChange={(changed, values) => validateForm(values)}
+          >
             <Form.Item name='firstName' label='First name' labelAlign='left'>
               <Input onChange={(e) => setFirstName(e.target.value)} />
             </Form.Item>
             <Form.Item name='secondName' label='Second name' labelAlign='left'>
               <Input onChange={(e) => setLastName(e.target.value)} />
             </Form.Item>
-            <Form.Item name='email' label='Email' labelAlign='left'>
+            <Form.Item
+              name='email'
+              label='Email'
+              labelAlign='left'
+              rules={[emailFormRule]}
+            >
               <Input onChange={(e) => setEmail(e.target.value)} />
             </Form.Item>
             <Form.Item {...tailLayout}>
@@ -97,7 +126,11 @@ const ProfilePage = function (props: Props) {
                 <Button onClick={() => setUpdating(false)} danger>
                   Cancel
                 </Button>
-                <Button onClick={handleUpdate} type='primary'>
+                <Button
+                  onClick={handleUpdate}
+                  type='primary'
+                  disabled={!formValid}
+                >
                   Save
                 </Button>
               </Space>

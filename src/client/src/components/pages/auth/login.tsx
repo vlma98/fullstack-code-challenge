@@ -3,11 +3,13 @@ import { Button, Form, Input } from 'antd'
 import UsersContext from '../../../contexts/users'
 
 import './auth.css'
+import validateEmail, { emailFormRule } from '../../../utils/form/validateEmail'
 
 interface Props {}
 const Login = function (props: Props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [formValid, setFormValid] = useState(false)
 
   const { login, isLoading } = useContext(UsersContext)
 
@@ -23,14 +25,23 @@ const Login = function (props: Props) {
     wrapperCol: { offset: 10, span: 16 }
   }
 
+  const validateForm = (values: { email: string; password: string }) => {
+    const { email, password } = values
+    setFormValid(validateEmail(email) && password !== '')
+  }
+
   return (
     <div>
-      <Form {...layout} className='auth-form'>
+      <Form
+        {...layout}
+        className='auth-form'
+        onValuesChange={(changed, values) => validateForm(values)}
+      >
         <Form.Item
           label='Email'
           name='email'
           labelAlign='left'
-          rules={[{ message: 'Not a valid email', type: 'email' }]}
+          rules={[emailFormRule]}
         >
           <Input
             type='email'
@@ -46,7 +57,12 @@ const Login = function (props: Props) {
           />
         </Form.Item>
         <Form.Item {...tailLayout}>
-          <Button type='primary' onClick={handleLogin} loading={isLoading}>
+          <Button
+            type='primary'
+            onClick={handleLogin}
+            loading={isLoading}
+            disabled={!formValid}
+          >
             Login
           </Button>
         </Form.Item>

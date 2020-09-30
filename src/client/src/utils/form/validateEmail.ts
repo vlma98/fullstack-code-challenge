@@ -11,6 +11,6 @@ export default function (email: string): boolean {
 }
 
 export const emailFormRule: Rule = {
-  message: 'InvalidEmail',
+  message: 'Invalid email',
   pattern: emailBasicRegex
 }

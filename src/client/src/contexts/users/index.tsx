@@ -29,7 +29,9 @@ const UserContext = createContext<IUserContext>({
   changePassword: async (...args: Parameters<typeof API.updatePassword>) => {}
 })
 
-const UserContextProvider = function (props: { children: ReactNode }) {
+const UserContextProvider: React.FC = function (props: {
+  children?: ReactNode
+}) {
   const { children } = props
   const [user, setUser] = useState<IUser | null>(null)
   const [isLoading, setIsLoading] = useState(false)

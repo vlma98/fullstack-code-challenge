@@ -124,7 +124,10 @@ const ProfilePage = function (props: Props) {
               labelAlign='left'
               rules={[emailFormRule]}
             >
-              <Input onChange={(e) => setEmail(e.target.value)} />
+              <Input
+                data-testid='email'
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </Form.Item>
             <Form.Item {...tailLayout}>
               <Space direction='horizontal'>
@@ -155,18 +158,21 @@ const ProfilePage = function (props: Props) {
           <Form {...layout} style={{ marginTop: 15 }}>
             <Form.Item name='password' label='Password'>
               <Input.Password
+                data-testid='password'
                 placeholder='Password'
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Item>
             <Form.Item name='newPassword' label='New Password'>
               <Input.Password
+                data-testid='newPassword'
                 placeholder='New Password'
                 onChange={(e) => setNewPassword(e.target.value)}
               />
             </Form.Item>
             <Form.Item name='confirmPassword' label='Confirm Password'>
               <Input.Password
+                data-testid='confirmPassword'
                 placeholder='Confirm Password'
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />

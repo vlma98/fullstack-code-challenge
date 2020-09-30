@@ -5,10 +5,7 @@ import UsersContext from '../../../contexts/users'
 import Layout from '../../ui/layout'
 import './profile.css'
 import useError from '../../../hooks/useError'
-import validateEmail, {
-  emailBasicRegex,
-  emailFormRule
-} from '../../../utils/form/validateEmail'
+import validateEmail, { emailFormRule } from '../../../utils/form/validateEmail'
 
 const { Paragraph: p } = Typography
 
@@ -23,7 +20,7 @@ const tailLayout = {
 }
 
 const ProfilePage = function (props: Props) {
-  const { user, isLoading, updateMe, changePassword } = useContext(UsersContext)
+  const { user, updateMe, changePassword } = useContext(UsersContext)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')

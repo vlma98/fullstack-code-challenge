@@ -1,3 +1,26 @@
+# Como Rodar:
+Tenha instalado os seguintes programas:
+- node 12.* 
+- npm
+- [mongodb server](https://www.mongodb.com/try/download/community)
+Clone o projeto
+
+
+Na diretório raiz, crie um arquivo com nome .env, como ilustrado no .env.example, passando uma URI de conexão com o mongo, como `MONGODB_URI=mongodb://localhost/gh-issues-tracker`
+
+No diretório raiz, dê o comando `npm install .`
+
+No diretório `src/cliente`, dê o comando `npm install .`
+
+Inicie o db com o comando `mongod` (se tiver passado uma URI de algum provedor de db na nuvem, não é necessário esse passo)
+
+Inicie o backend com o comando `npm run dev` a partir do diretório raiz
+
+Inicie o cliente com o comando `npm start` a partir do diretório `src/client`
+
+____
+Requistos:
+
 # Code challenge - Fullstack
 
 ## Sobre a Ruptiva

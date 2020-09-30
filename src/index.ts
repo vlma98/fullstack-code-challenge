@@ -4,7 +4,12 @@ import cors from 'cors'
 import db from './db'
 import { userRoutes, authRoute, githubRoutes } from './routes'
 import { errorMiddleware } from './middlewares'
+import * as dotenv from 'dotenv'
 import ctes from './constants'
+import path from 'path'
+
+dotenv.config()
+
 const app = express()
 const PORT = 8080
 

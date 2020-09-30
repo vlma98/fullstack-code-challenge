@@ -13,6 +13,9 @@ interface IUserContext {
   updateMe: (...args: Parameters<typeof API.updateMe>) => Promise<void>
   deleteMe: (...args: Parameters<typeof API.deleteMe>) => Promise<void>
   logout: () => Promise<void>
+  changePassword: (
+    ...args: Parameters<typeof API.updatePassword>
+  ) => Promise<void>
 }
 
 const UserContext = createContext<IUserContext>({
@@ -22,7 +25,8 @@ const UserContext = createContext<IUserContext>({
   login: async (...args: Parameters<typeof API.login>) => {},
   updateMe: async (...args: Parameters<typeof API.updateMe>) => {},
   deleteMe: async (...args: Parameters<typeof API.deleteMe>) => {},
-  logout: async () => {}
+  logout: async () => {},
+  changePassword: async (...args: Parameters<typeof API.updatePassword>) => {}
 })
 
 const UserContextProvider = function (props: { children: ReactNode }) {
@@ -133,6 +137,19 @@ const UserContextProvider = function (props: { children: ReactNode }) {
     navigate('/auth')
   }
 
+  const changePassword = async (password: string, newPassword: string) => {
+    API.updatePassword(password, newPassword)
+      .then((response) => {
+        const { message } = response.data
+        if (response.status === 200) {
+          setSuccess('Password changed!')
+        } else {
+          setError(message)
+        }
+      })
+      .catch(errorFallback)
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -142,7 +159,8 @@ const UserContextProvider = function (props: { children: ReactNode }) {
         login,
         updateMe,
         deleteMe,
-        logout
+        logout,
+        changePassword
       }}
     >
       {children}

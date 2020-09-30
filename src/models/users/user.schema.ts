@@ -42,7 +42,7 @@ const UserSchema = new mongoose.Schema({
 
 export interface IUserBase extends IUserSchema {
   fullName: string
-  verifyPassword: (candidate: string) => Promise<boolean>
+  verifyPassword: (candidate: string) => boolean
 }
 UserSchema.methods.verifyPassword = function (candidate: string) {
   return bcrypt.compareSync(candidate, this.password)

@@ -16,3 +16,6 @@ export const updateMe = (user: Partial<IUser>) => axios.put('/users/me', user)
 export const deleteMe = () => axios.delete('/users/me')
 
 export const getMe = () => axios.get('/users/me')
+
+export const updatePassword = (password: string, newPassword: string) =>
+  axios.put('/users/me/change-password', { password, newPassword })

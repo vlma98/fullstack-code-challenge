@@ -1,6 +1,10 @@
 import { AuthedMiddleware, Middleware } from '../../types'
 import User from '../../models/users'
-import { EmailAlreadyTakenError, InvalidRequestError } from '../../errors'
+import {
+  EmailAlreadyTakenError,
+  InvalidPasswordError,
+  InvalidRequestError
+} from '../../errors'
 import {
   ICreateUserBody,
   IUpdateUserBody,
@@ -83,4 +87,20 @@ export const deleteUser: AuthedMiddleware = async (req, res, next) => {
       return res.status(200).json({ user: deleted })
     })
     .catch((err) => next(err))
+}
+
+export const changePassword: AuthedMiddleware = async (req, res, next) => {
+  const { user } = req
+  const { password, newPassword } = req.body
+  if (user.verifyPassword(password)) {
+    user.password = newPassword
+    user
+      .save()
+      .then(() => {
+        return res.status(200).json({ message: 'ok' })
+      })
+      .catch(next)
+  } else {
+    return next(new InvalidPasswordError('Not ur password my dude'))
+  }
 }

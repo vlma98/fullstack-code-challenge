@@ -5,7 +5,8 @@ import {
   deleteUser,
   getUser,
   getUsers,
-  updateUser
+  updateUser,
+  changePassword
 } from '../../controllers/users'
 import verifyAuth from '../../middlewares/verifyAuth'
 
@@ -18,6 +19,8 @@ router.get('/me', getUser)
 router.post('/', createUser)
 
 router.put('/me', verifyAuth, updateUser)
+
+router.put('/me/change-password', verifyAuth, changePassword)
 
 router.delete('/me', verifyAuth, deleteUser)
 

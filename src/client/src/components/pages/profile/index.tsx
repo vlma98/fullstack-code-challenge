@@ -23,7 +23,7 @@ const tailLayout = {
 }
 
 const ProfilePage = function (props: Props) {
-  const { user, isLoading, updateMe } = useContext(UsersContext)
+  const { user, isLoading, updateMe, changePassword } = useContext(UsersContext)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -35,8 +35,16 @@ const ProfilePage = function (props: Props) {
   const [formValid, setFormValid] = useState(true)
   const [, setError] = useError()
   const handleChangePassword = async () => {
-    alert(`Changin password with ${password} ${confirmPassword} ${newPassword}`)
-    setChanginPassword(false)
+    if (newPassword !== confirmPassword) {
+      setError('Passwords differ!')
+      return
+    }
+    changePassword(password, newPassword).finally(() => {
+      setChanginPassword(false)
+      setPassword('')
+      setConfirmPassword('')
+      setNewPassword('')
+    })
   }
 
   if (!user) {

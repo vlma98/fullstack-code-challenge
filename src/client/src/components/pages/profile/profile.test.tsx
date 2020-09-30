@@ -67,4 +67,24 @@ describe('The Profile page', () => {
     await waitForElement(() => getByText(/Invalid email/))
     expect(saveButton).toBeDisabled()
   })
+
+  test('shows error notification when changes password but "New Password" and "Confirm Password" fields differ', async () => {
+    const { getByTestId, getByText } = render(mockProfile())
+
+    const changePasswordButton = getByText('Change Password')
+    act(() => {
+      fireEvent.click(changePasswordButton)
+    })
+    const newPasswordInput = getByTestId('newPassword')
+    const confirmPasswordInput = getByTestId('confirmPassword')
+    const okButton = getByText('OK')
+
+    act(() => {
+      fireEvent.change(newPasswordInput, { target: { value: '123' } })
+      fireEvent.change(confirmPasswordInput, { target: { value: '321' } })
+      fireEvent.click(okButton)
+    })
+
+    waitForElement(() => getByText(/Passwords differ/))
+  })
 })
